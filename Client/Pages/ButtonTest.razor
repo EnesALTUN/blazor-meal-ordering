@@ -23,6 +23,9 @@
 
     private void changeTitle()
     {
-        Modal?.Show<Counter>("Counter Popup Page");
+        ModalParameters mParams = new();
+        mParams.Add("Message", "Bu bir test popup denemesidir.");
+
+        Modal?.Show<ShowMessageModalComponent>("Counter Popup Page", mParams);
     }
 }
