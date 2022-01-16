@@ -1,6 +1,6 @@
 using Blazored.Modal;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.ResponseCompression;
+using MealOrdering.Business.ModelMapping.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,8 @@ builder.Services.AddControllersWithViews()
     });
 builder.Services.AddRazorPages();
 builder.Services.AddBlazoredModal();
+
+builder.Services.AddAutoMapper(option => option.AddProfile<MappingProfile>());
 
 var app = builder.Build();
 
