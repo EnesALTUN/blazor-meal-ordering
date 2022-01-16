@@ -1,4 +1,5 @@
 ﻿@page "/button-test"
+@using MealOrdering.Client.Utilities
 
 <h3>@title</h3>
 
@@ -6,9 +7,9 @@
 
     <div class="container">
         <div class="btn-toolbar">
-            <CustomEditButtonComponent OnClick="changeTitle" />
+            <CustomEditButtonComponent Caption="Show Message" OnClick="changeTitle" />
 
-            <CustomEditButtonComponent Caption="Edit Caption" Color="danger" Icon="far fa-edit" IsSmall="false" />
+            <CustomEditButtonComponent Caption="Edit Caption" OnClick="showConfirmation" Color="danger" Icon="far fa-edit" IsSmall="false" />
 
             <AddNewButtonComponent />
         </div>
@@ -19,13 +20,23 @@
     [CascadingParameter]
     IModalService? Modal { get; set; }
 
+    [Inject]
+    ModalManager ModalManager { get; set; }
+
     private String? title = "";
 
-    private void changeTitle()
+    private async Task changeTitle()
     {
-        ModalParameters mParams = new();
-        mParams.Add("Message", "Bu bir test popup denemesidir.");
+        await ModalManager.ShowMessageAsync("Show Message Title", "Kayıt Silindi", 3000);
+    }
 
-        Modal?.Show<ShowMessageModalComponent>("Counter Popup Page", mParams);
+    async Task showConfirmation()
+    {
+        var isResult = await ModalManager.ConfirmationAsync("Confirmations", "Are you sure that it will be deleted?");
+
+        if (isResult)
+            title = "Yes just clicked";
+        else
+            title = "No just clicked";
     }
 }
