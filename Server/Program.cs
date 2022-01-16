@@ -1,11 +1,16 @@
 using Blazored.Modal;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddFluentValidation(options =>
+    {
+        options.RegisterValidatorsFromAssemblyContaining<Program>();
+    });
 builder.Services.AddRazorPages();
 builder.Services.AddBlazoredModal();
 
