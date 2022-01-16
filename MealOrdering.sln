@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealOrdering.Server", "Server\MealOrdering.Server.csproj", "{69D90497-E139-4066-B126-19B10CAB31A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealOrdering.Server", "Server\MealOrdering.Server.csproj", "{69D90497-E139-4066-B126-19B10CAB31A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealOrdering.Client", "Client\MealOrdering.Client.csproj", "{FB768176-0EA0-4BEE-A16D-3EF99B1402D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealOrdering.Client", "Client\MealOrdering.Client.csproj", "{FB768176-0EA0-4BEE-A16D-3EF99B1402D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealOrdering.Shared", "Shared\MealOrdering.Shared.csproj", "{076CB49D-7BEB-46E8-9DA5-2EB97E9A998A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealOrdering.Shared", "Shared\MealOrdering.Shared.csproj", "{076CB49D-7BEB-46E8-9DA5-2EB97E9A998A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
