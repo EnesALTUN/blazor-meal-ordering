@@ -16,10 +16,13 @@
 
 </div>
 @code {
+    [CascadingParameter]
+    IModalService? Modal { get; set; }
+
     private String? title = "";
 
     private void changeTitle()
     {
-        title = "New Title";
+        Modal?.Show<Counter>("Counter Popup Page");
     }
 }
