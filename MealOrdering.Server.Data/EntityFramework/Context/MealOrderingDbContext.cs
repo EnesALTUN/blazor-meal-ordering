@@ -13,6 +13,12 @@ namespace MealOrdering.Server.Data.EntityFramework.Context
 
         public virtual DbSet<User> User { get; set; }
 
+        public virtual DbSet<Order> Order { get; set; }
+
+        public virtual DbSet<SubOrder> SubOrder { get; set; }
+
+        public virtual DbSet<Supplier> Supplier { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(DbModelBuilder.DbBuilder(modelBuilder));
