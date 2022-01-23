@@ -18,8 +18,12 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
             _table = _context.Set<TEntity>();
         }
 
+        public async Task<TEntity> GetByIdAsync(Guid id)
+        {
+            return await _table.FindAsync(id);
+        }
 
-        public async Task<TEntity> GetByIdAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate)
         {
             IQueryable<TEntity> query = _table;
 
@@ -41,7 +45,7 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
 
         public async Task InsertAsync(TEntity entity)
         {
-            await _table.AddAsync(entity);
+            var addedRecord = await _table.AddAsync(entity);
         }
 
         public async Task UpdateAsync(TEntity entity)

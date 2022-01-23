@@ -1,20 +1,32 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Blazored.Modal;
 using FluentValidation.AspNetCore;
+using MealOrdering.Business.DependencyResolvers.AutoFac;
 using MealOrdering.Business.ModelMapping.AutoMapper;
+using MealOrdering.Server.Data.EntityFramework.Context;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(p => p.RegisterModule(new AutofacBusinessModule()));
 
 builder.Services.AddControllersWithViews()
-    .AddFluentValidation(options =>
-    {
-        options.RegisterValidatorsFromAssemblyContaining<Program>();
-    });
+            .AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblyContaining<Program>();
+            });
 builder.Services.AddRazorPages();
 builder.Services.AddBlazoredModal();
 
 builder.Services.AddAutoMapper(option => option.AddProfile<MappingProfile>());
+
+builder.Services.AddDbContext<MealOrderingDbContext>(config =>
+{
+    config.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConn"));
+});
 
 var app = builder.Build();
 
@@ -26,7 +38,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
