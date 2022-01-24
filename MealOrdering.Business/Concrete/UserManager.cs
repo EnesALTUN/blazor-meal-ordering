@@ -17,32 +17,62 @@ namespace MealOrdering.Business.Concrete
             _mapper = mapper;
         }
 
-        public async Task AddUser(UserDto user)
+        public async Task<UserDto> AddUser(UserDto user)
         {
-            if (user == null)
-                throw new ArgumentNullException(nameof(user), "The user object cannot be empty.");
+            User dbUser = await _unitOfWork.User.GetByIdAsync(user.Id);
 
-            User userEntity = _mapper.Map<User>(user);
+            if (dbUser is not null)
+                throw new Exception("The corresponding record already exists.");
 
-            await _unitOfWork.User.InsertAsync(userEntity);
+            dbUser = _mapper.Map<User>(user);
+
+            await _unitOfWork.User.InsertAsync(dbUser);
+
+            await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<UserDto>(dbUser);
         }
 
         public async Task<UserDto> GetUserById(Guid id)
         {
-            User userEntity = await _unitOfWork.User.GetByIdAsync(id);
+            User dbUser = await _unitOfWork.User.GetByIdAsync(id);
 
-            UserDto userDto = _mapper.Map<UserDto>(userEntity);
-
-            return userDto;
+            return _mapper.Map<UserDto>(dbUser);
         }
 
         public async Task<List<UserDto>> GetAllUsers()
         {
-            List<User> usersEntity = await _unitOfWork.User.GetAllAsync();
+            List<User> dbUsers = await _unitOfWork.User.GetAllAsync();
 
-            List<UserDto> usersDto = _mapper.Map<List<UserDto>>(usersEntity);
+            return _mapper.Map<List<UserDto>>(dbUsers);
+        }
 
-            return usersDto;
+        public async Task<UserDto> UpdateUser(UserDto user)
+        {
+            User dbUser = await _unitOfWork.User.GetByIdAsync(user.Id);
+
+            if (dbUser is null)
+                throw new Exception("The corresponding record already exists.");
+
+            _mapper.Map(user, dbUser);
+
+            int result = await _unitOfWork.SaveAsync();
+
+            return _mapper.Map<UserDto>(dbUser);
+        }
+
+        public async Task<bool> DeleteUserById(Guid id)
+        {
+            User dbUser = await _unitOfWork.User.GetByIdAsync(id);
+
+            if (dbUser is null)
+                throw new Exception("User not found");
+
+            await _unitOfWork.User.DeleteAsync(dbUser);
+
+            int result = await _unitOfWork.SaveAsync();
+
+            return result > 0;
         }
     }
 }

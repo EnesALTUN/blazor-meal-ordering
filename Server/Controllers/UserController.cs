@@ -1,4 +1,6 @@
 ﻿using MealOrdering.Business.Abstract;
+using MealOrdering.Entities.Dto;
+using MealOrdering.Entities.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealOrdering.Server.Controllers
@@ -15,11 +17,14 @@ namespace MealOrdering.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ServiceResponse<List<UserDto>>> GetUsers()
         {
             var result = await _userService.GetAllUsers();
 
-            return Ok(result);
+            return new ServiceResponse<List<UserDto>>
+            {
+                Data = result
+            };
         }
     }
 }

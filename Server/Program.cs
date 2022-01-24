@@ -26,6 +26,7 @@ builder.Services.AddAutoMapper(option => option.AddProfile<MappingProfile>());
 builder.Services.AddDbContext<MealOrderingDbContext>(config =>
 {
     config.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConn"));
+    config.EnableSensitiveDataLogging();
 });
 
 var app = builder.Build();
