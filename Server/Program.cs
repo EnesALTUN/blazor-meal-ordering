@@ -6,7 +6,7 @@ using MealOrdering.Business.DependencyResolvers.AutoFac;
 using MealOrdering.Business.ModelMapping.AutoMapper;
 using MealOrdering.Server.Data.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,11 @@ builder.Services.AddControllersWithViews()
             });
 builder.Services.AddRazorPages();
 builder.Services.AddBlazoredModal();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MealOrderingAPI", Version = "v1" });
+});
 
 builder.Services.AddAutoMapper(option => option.AddProfile<MappingProfile>());
 
@@ -41,6 +46,9 @@ else
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(config => config.SwaggerEndpoint("/swagger/v1/swagger.json", "MealOrderingAPI v1"));
 
 app.UseHttpsRedirection();
 

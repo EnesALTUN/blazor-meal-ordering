@@ -45,7 +45,7 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
 
         public async Task InsertAsync(TEntity entity)
         {
-            var addedRecord = await _table.AddAsync(entity);
+            await _table.AddAsync(entity);
         }
 
         public async Task UpdateAsync(TEntity entity)
