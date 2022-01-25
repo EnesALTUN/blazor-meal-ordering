@@ -21,7 +21,7 @@ namespace MealOrdering.Repository.Concrete
 
         public ISubOrderRepository SubOrder => _subOrderRepository ?? new EfSubOrderRepository(_context);
 
-        public ISupplierRepository Superlier => _supplierRepository ?? new EfSupplierRepository(_context);
+        public ISupplierRepository Supplier => _supplierRepository ?? new EfSupplierRepository(_context);
 
         public IUserRepository User => _userRepository ?? new EfUserRepository(_context);
 

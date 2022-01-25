@@ -6,7 +6,7 @@
 
         ISubOrderRepository SubOrder { get; }
 
-        ISupplierRepository Superlier { get; }
+        ISupplierRepository Supplier { get; }
 
         IUserRepository User { get; }
 

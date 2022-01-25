@@ -1,6 +1,8 @@
-﻿namespace MealOrdering.Entities.Dto
+﻿using MealOrdering.Core.Entities.Abstract;
+
+namespace MealOrdering.Entities.Dto
 {
-    public class SubOrderDto
+    public class SubOrderDto : BaseDto, IDto
     {
         public Guid CreatedUserId { get; set; }
 
