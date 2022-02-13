@@ -68,6 +68,11 @@ namespace MealOrdering.Business.Concrete
             if (dbSupplier is null)
                 throw new Exception("Supplier not found");
 
+            int orderCount = await _unitOfWork.Order.CountAsync(order => order.SupplierId == id);
+
+            if (orderCount > 0)
+                throw new Exception($"There are {orderCount} sub order for the order you are trying to delete");
+
             await _unitOfWork.Supplier.DeleteAsync(dbSupplier);
 
             int result = await _unitOfWork.SaveAsync();

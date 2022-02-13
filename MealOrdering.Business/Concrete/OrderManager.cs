@@ -42,7 +42,7 @@ namespace MealOrdering.Business.Concrete
 
         public async Task<List<OrderDto>> GetAllOrder()
         {
-            List<Order> dbOrders = await _unitOfWork.Order.GetAllAsync();
+            List<Order> dbOrders = await _unitOfWork.Order.GetAllAsync(predicate => true, include=> include.Supplier);
 
             return _mapper.Map<List<OrderDto>>(dbOrders);
         }
@@ -67,6 +67,11 @@ namespace MealOrdering.Business.Concrete
 
             if (dbOrder is null)
                 throw new Exception("Order not found");
+
+            int subOrderCount = await _unitOfWork.SubOrder.CountAsync(x => x.OrderId == id);
+
+            if (subOrderCount > 0)
+                throw new Exception($"There are {subOrderCount} sub order for the order you are trying to delete");
 
             await _unitOfWork.Order.DeleteAsync(dbOrder);
 

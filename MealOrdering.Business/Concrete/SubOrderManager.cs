@@ -42,7 +42,7 @@ namespace MealOrdering.Business.Concrete
 
         public async Task<List<SubOrderDto>> GetAllSubOrder()
         {
-            List<SubOrder> dbSubOrders = await _unitOfWork.SubOrder.GetAllAsync();
+            List<SubOrder> dbSubOrders = await _unitOfWork.SubOrder.GetAllAsync(predicate => true, include => include.Order);
 
             return _mapper.Map<List<SubOrderDto>>(dbSubOrders);
         }

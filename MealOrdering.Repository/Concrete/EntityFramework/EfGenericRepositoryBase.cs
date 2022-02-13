@@ -3,6 +3,7 @@ using MealOrdering.Repository.Abstract;
 using MealOrdering.Server.Data.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 
 namespace MealOrdering.Repository.Concrete.EntityFramework
 {
@@ -23,7 +24,7 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
             return await _table.FindAsync(id);
         }
 
-        public async Task<TEntity> GetAsync(params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task<TEntity> GetAsync([Optional] params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _table;
 
@@ -38,17 +39,7 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            IQueryable<TEntity> query = _table;
-
-            if (predicate is not null)
-                query = query.Where(predicate);
-
-            return await query.SingleOrDefaultAsync();
-        }
-
-        public async Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _table;
 
@@ -66,17 +57,7 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            IQueryable<TEntity> query = _table;
-
-            if (predicate is not null)
-                query = query.Where(predicate);
-
-            return await query.ToListAsync();
-        }
-
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _table;
 

@@ -1,5 +1,6 @@
 ﻿using MealOrdering.Core.Entities.Abstract;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 
 namespace MealOrdering.Repository.Abstract
 {
@@ -7,15 +8,11 @@ namespace MealOrdering.Repository.Abstract
     {
         Task<TEntity> GetByIdAsync(Guid id);
 
-        Task<TEntity> GetAsync(params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<TEntity> GetAsync([Optional] params Expression<Func<TEntity, object>>[] includeProperties);
 
-        Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties);
 
-        Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
-
-        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = default);
-
-        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = default, [Optional] params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task InsertAsync(TEntity entity);
 
