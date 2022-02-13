@@ -56,7 +56,7 @@ namespace MealOrdering.Business.Concrete
 
             _mapper.Map(user, dbUser);
 
-            int result = await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
 
             return _mapper.Map<UserDto>(dbUser);
         }

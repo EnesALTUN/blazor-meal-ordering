@@ -24,9 +24,11 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
             return await _table.FindAsync(id);
         }
 
-        public async Task<TEntity> GetAsync([Optional] params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _table;
+
+            query = query.Where(predicate);
 
             if (includeProperties.Any())
             {

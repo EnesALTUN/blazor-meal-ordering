@@ -19,12 +19,7 @@ namespace MealOrdering.Business.Concrete
 
         public async Task<OrderDto> AddOrder(OrderDto order)
         {
-            Order dbOrder = await _unitOfWork.Order.GetByIdAsync(order.Id);
-
-            if (dbOrder is not null)
-                throw new Exception("The corresponding record already exists.");
-
-            dbOrder = _mapper.Map<Order>(order);
+            Order dbOrder = _mapper.Map<Order>(order);
 
             await _unitOfWork.Order.InsertAsync(dbOrder);
 
@@ -43,6 +38,8 @@ namespace MealOrdering.Business.Concrete
         public async Task<List<OrderDto>> GetAllOrder()
         {
             List<Order> dbOrders = await _unitOfWork.Order.GetAllAsync(predicate => true, include=> include.Supplier);
+
+            dbOrders = dbOrders.OrderBy(o => o.CreatedDate).ToList();
 
             return _mapper.Map<List<OrderDto>>(dbOrders);
         }

@@ -19,12 +19,7 @@ namespace MealOrdering.Business.Concrete
 
         public async Task<SupplierDto> AddSupplier(SupplierDto supplier)
         {
-            Supplier dbSupplier = await _unitOfWork.Supplier.GetByIdAsync(supplier.Id);
-
-            if (dbSupplier is not null)
-                throw new Exception("The corresponding record already exists.");
-
-            dbSupplier = _mapper.Map<Supplier>(supplier);
+            Supplier dbSupplier = _mapper.Map<Supplier>(supplier);
 
             await _unitOfWork.Supplier.InsertAsync(dbSupplier);
 
@@ -44,6 +39,8 @@ namespace MealOrdering.Business.Concrete
         {
             List<Supplier> dbSupplier = await _unitOfWork.Supplier.GetAllAsync();
 
+            dbSupplier = dbSupplier.OrderBy(o => o.CreatedDate).ToList();
+
             return _mapper.Map<List<SupplierDto>>(dbSupplier);
         }
 
@@ -52,7 +49,7 @@ namespace MealOrdering.Business.Concrete
             Supplier dbSupplier = await _unitOfWork.Supplier.GetByIdAsync(supplier.Id);
 
             if (dbSupplier is null)
-                throw new Exception("The corresponding record already exists.");
+                throw new Exception("Supplier not found");
 
             _mapper.Map(supplier, dbSupplier);
 

@@ -19,12 +19,15 @@ namespace MealOrdering.Business.Concrete
 
         public async Task<SubOrderDto> AddSubOrder(SubOrderDto subOrder)
         {
-            SubOrder dbSubOrder = await _unitOfWork.SubOrder.GetByIdAsync(subOrder.Id);
+            Order order = await _unitOfWork.Order.GetByIdAsync(subOrder.OrderId);
 
-            if (dbSubOrder is not null)
-                throw new Exception("The corresponding record already exists.");
+            if (order is null)
+                throw new Exception("The main order not found");
 
-            dbSubOrder = _mapper.Map<SubOrder>(subOrder);
+            if (order.ExpireDate <= DateTime.UtcNow)
+                throw new Exception("You cannot create sub order. It is expired !!");
+
+            SubOrder dbSubOrder = _mapper.Map<SubOrder>(subOrder);
 
             await _unitOfWork.SubOrder.InsertAsync(dbSubOrder);
 
@@ -35,7 +38,7 @@ namespace MealOrdering.Business.Concrete
 
         public async Task<SubOrderDto> GetSubOrderById(Guid id)
         {
-            SubOrder dbSubOrder = await _unitOfWork.SubOrder.GetByIdAsync(id);
+            SubOrder dbSubOrder = await _unitOfWork.SubOrder.GetAsync(filter => filter.Id == id, include => include.Order);
 
             return _mapper.Map<SubOrderDto>(dbSubOrder);
         }
@@ -43,6 +46,8 @@ namespace MealOrdering.Business.Concrete
         public async Task<List<SubOrderDto>> GetAllSubOrder()
         {
             List<SubOrder> dbSubOrders = await _unitOfWork.SubOrder.GetAllAsync(predicate => true, include => include.Order);
+
+            dbSubOrders = dbSubOrders.OrderBy(o => o.CreatedDate).ToList();
 
             return _mapper.Map<List<SubOrderDto>>(dbSubOrders);
         }
@@ -66,7 +71,7 @@ namespace MealOrdering.Business.Concrete
             SubOrder dbSubOrder = await _unitOfWork.SubOrder.GetByIdAsync(id);
 
             if (dbSubOrder is null)
-                throw new Exception("Order not found");
+                throw new Exception("Sub order not found");
 
             await _unitOfWork.SubOrder.DeleteAsync(dbSubOrder);
 
