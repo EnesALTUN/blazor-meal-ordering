@@ -7,6 +7,8 @@ using MealOrdering.Business.ModelMapping.AutoMapper;
 using MealOrdering.Server.Data.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MealOrdering.Core.Extensions;
+using MealOrdering.Core.Entities.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,10 @@ builder.Services.AddDbContext<MealOrderingDbContext>(config =>
     config.EnableSensitiveDataLogging();
 });
 
+var _jwtSetting = builder.Configuration.GetSection("JwtSetting").Get<JwtSetting>();
+
+builder.Services.AddJwtAuthentication(_jwtSetting);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,6 +63,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();

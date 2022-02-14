@@ -1,4 +1,4 @@
-﻿using MealOrdering.Core.Entities.Abstract;
+﻿using MealOrdering.Core.Entities.Base;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 

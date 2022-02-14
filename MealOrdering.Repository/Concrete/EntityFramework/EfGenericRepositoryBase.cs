@@ -1,4 +1,4 @@
-﻿using MealOrdering.Core.Entities.Abstract;
+﻿using MealOrdering.Core.Entities.Base;
 using MealOrdering.Repository.Abstract;
 using MealOrdering.Server.Data.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;

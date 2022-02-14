@@ -1,4 +1,4 @@
-﻿namespace MealOrdering.Core.Entities.Abstract
+﻿namespace MealOrdering.Core.Entities.Base
 {
     public class BaseDto
     {
