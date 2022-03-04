@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Client\MealOrdering.Client.csproj" />
     <ProjectReference Include="..\MealOrdering.Business\MealOrdering.Business.csproj" />
-    <ProjectReference Include="..\MealOrdering.Entities\MealOrdering.Entities.csproj" />
     <ProjectReference Include="..\Shared\MealOrdering.Shared.csproj" />
   </ItemGroup>
 

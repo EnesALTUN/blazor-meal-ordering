@@ -1,4 +1,4 @@
-﻿using MealOrdering.Entities.Dto;
+﻿using MealOrdering.Core.Entities.Dto;
 using MealOrdering.Entities.Response;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;

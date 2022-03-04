@@ -1,5 +1,5 @@
 ﻿using MealOrdering.Business.Abstract;
-using MealOrdering.Entities.Dto;
+using MealOrdering.Core.Entities.Dto;
 using MealOrdering.Entities.Response;
 using Microsoft.AspNetCore.Mvc;
 

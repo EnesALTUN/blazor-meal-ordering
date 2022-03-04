@@ -41,24 +41,6 @@ namespace MealOrdering.Repository.Concrete.EntityFramework
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            IQueryable<TEntity> query = _table;
-
-            if (predicate is not null)
-                query = query.Where(predicate);
-
-            if (includeProperties.Any())
-            {
-                foreach (var includeProperty in includeProperties)
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
-
-            return await query.SingleOrDefaultAsync();
-        }
-
         public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = _table;

@@ -1,4 +1,4 @@
-﻿using MealOrdering.Entities.Dto;
+﻿using MealOrdering.Core.Entities.Dto;
 
 namespace MealOrdering.Business.Abstract
 {
@@ -7,6 +7,8 @@ namespace MealOrdering.Business.Abstract
         Task<UserDto> AddUser(UserDto user);
 
         Task<UserDto> GetUserById(Guid id);
+
+        Task<UserDto> GetUserByEmail(string email);
 
         Task<List<UserDto>> GetAllUsers();
 

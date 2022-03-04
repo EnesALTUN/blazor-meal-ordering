@@ -10,8 +10,6 @@ namespace MealOrdering.Repository.Abstract
 
         Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties);
 
-        Task<TEntity> GetByWithCriteriaAsync(Expression<Func<TEntity, bool>> predicate, [Optional] params Expression<Func<TEntity, object>>[] includeProperties);
-
         Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = default, [Optional] params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task InsertAsync(TEntity entity);

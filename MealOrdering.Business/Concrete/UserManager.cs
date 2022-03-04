@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MealOrdering.Business.Abstract;
+using MealOrdering.Core.Entities.Dto;
+using MealOrdering.Core.Utilities;
 using MealOrdering.Entities.Concrete;
-using MealOrdering.Entities.Dto;
 using MealOrdering.Repository.Abstract;
 
 namespace MealOrdering.Business.Concrete
@@ -24,6 +25,8 @@ namespace MealOrdering.Business.Concrete
             if (dbUser is not null)
                 throw new Exception("The corresponding record already exists.");
 
+            user.Password = HashingHelper.HashPassword(user.Password);
+
             dbUser = _mapper.Map<User>(user);
 
             await _unitOfWork.User.InsertAsync(dbUser);
@@ -36,6 +39,16 @@ namespace MealOrdering.Business.Concrete
         public async Task<UserDto> GetUserById(Guid id)
         {
             User dbUser = await _unitOfWork.User.GetByIdAsync(id);
+
+            return _mapper.Map<UserDto>(dbUser);
+        }
+
+        public async Task<UserDto> GetUserByEmail(string email)
+        {
+            User dbUser = await _unitOfWork.User.GetAsync(predicate => predicate.EmailAddress.Contains(email));
+
+            if (dbUser is null)
+                throw new Exception("The corresponding record already exists.");
 
             return _mapper.Map<UserDto>(dbUser);
         }

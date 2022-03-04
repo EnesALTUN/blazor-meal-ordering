@@ -8,5 +8,5 @@ public class JwtSetting
 
     public string SecurityKey { get; set; }
 
-    public int ExpireInDay { get; set; }
+    public int ExpiryInDay { get; set; }
 }

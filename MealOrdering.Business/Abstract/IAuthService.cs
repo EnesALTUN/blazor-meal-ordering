@@ -1,8 +1,9 @@
-﻿using MealOrdering.Entities.Dto;
+﻿using MealOrdering.Core.Entities.Dto;
+using MealOrdering.Entities.Dto;
 
 namespace MealOrdering.Business.Abstract;
 
 public interface IAuthService
 {
-    string Login(UserLoginDto user);
+    Task<AccessTokenResponseDto> Login(UserLoginDto user);
 }

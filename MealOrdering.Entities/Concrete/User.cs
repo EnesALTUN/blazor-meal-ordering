@@ -10,6 +10,8 @@ namespace MealOrdering.Entities.Concrete
 
         public string EmailAddress { get; set; }
 
+        public string Password { get; set; }
+
 
         public virtual ICollection<Order> Orders { get; set;}
 

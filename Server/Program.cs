@@ -7,8 +7,10 @@ using MealOrdering.Business.ModelMapping.AutoMapper;
 using MealOrdering.Server.Data.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using MealOrdering.Core.Extensions;
 using MealOrdering.Core.Entities.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,9 +38,26 @@ builder.Services.AddDbContext<MealOrderingDbContext>(config =>
     config.EnableSensitiveDataLogging();
 });
 
-var _jwtSetting = builder.Configuration.GetSection("JwtSetting").Get<JwtSetting>();
+builder.Services.Configure<JwtSetting>(builder.Configuration.GetSection("JwtSetting"));
 
-builder.Services.AddJwtAuthentication(_jwtSetting);
+builder.Services.AddAuthentication(options => 
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new()
+    {
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidAudience = builder.Configuration["JwtSetting:Audience"],
+        ValidIssuer = builder.Configuration["JwtSetting:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSetting:SecurityKey"]))
+    };
+});
 
 var app = builder.Build();
 

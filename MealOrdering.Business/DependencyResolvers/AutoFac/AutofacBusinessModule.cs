@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using MealOrdering.Business.Abstract;
 using MealOrdering.Business.Concrete;
+using MealOrdering.Core.Utilities.Security.Jwt;
 using MealOrdering.Repository.Abstract;
 using MealOrdering.Repository.Concrete;
 using MealOrdering.Repository.Concrete.EntityFramework;
@@ -13,11 +14,17 @@ namespace MealOrdering.Business.DependencyResolvers.AutoFac
         {
             #region Core
 
+            builder.RegisterType<JwtHelper>().As<IJwtHelper>();
+
             #endregion
 
             #region Business
 
             builder.RegisterType<UserManager>().As<IUserService>();
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+            builder.RegisterType<OrderManager>().As<IOrderService>();
+            builder.RegisterType<SubOrderManager>().As<ISubOrderService>();
+            builder.RegisterType<SupplierManager>().As<ISupplierService>();
 
             #endregion
 
