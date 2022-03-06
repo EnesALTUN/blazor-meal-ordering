@@ -1,7 +1,7 @@
 ﻿using MealOrdering.Business.Abstract;
 using MealOrdering.Core.Entities.Dto;
+using MealOrdering.Core.Utilities.Results.Concrete;
 using MealOrdering.Entities.Request;
-using MealOrdering.Entities.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealOrdering.Server.Controllers
@@ -18,11 +18,15 @@ namespace MealOrdering.Server.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ServiceResponse<AccessTokenResponseDto>> Login([FromBody] UserLoginRequestDto user)
+        public async Task<ApiResult<AccessTokenResponseDto>> Login([FromBody] UserLoginRequestDto user)
         {
-            return new ServiceResponse<AccessTokenResponseDto>
+            var loginResult = await _authService.Login(user);
+
+            return new ApiResult<AccessTokenResponseDto>
             {
-                Data = await _authService.Login(user)
+                Success = loginResult.Success,
+                Message = loginResult.Message,
+                Data = loginResult.Data
             };
         }
     }

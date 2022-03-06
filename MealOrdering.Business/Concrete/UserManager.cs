@@ -2,93 +2,146 @@
 using MealOrdering.Business.Abstract;
 using MealOrdering.Core.Entities.Dto;
 using MealOrdering.Core.Utilities;
+using MealOrdering.Core.Utilities.Results.Abstract;
+using MealOrdering.Core.Utilities.Results.Concrete;
 using MealOrdering.Entities.Concrete;
 using MealOrdering.Repository.Abstract;
+using Microsoft.Extensions.Logging;
 
 namespace MealOrdering.Business.Concrete
 {
     public class UserManager : IUserService
     {
+        private readonly ILogger<UserManager> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UserManager(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserManager(ILogger<UserManager> logger, IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _logger = logger;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<UserDto> AddUser(UserDto user)
+        public async Task<IDataResult<UserDto>> AddUser(UserDto user)
         {
-            User dbUser = await _unitOfWork.User.GetByIdAsync(user.Id);
+            try
+            {
+                User dbUser = await _unitOfWork.User.GetByIdAsync(user.Id);
 
-            if (dbUser is not null)
-                throw new Exception("The corresponding record already exists.");
+                if (dbUser is not null)
+                    throw new Exception("The corresponding record already exists.");
 
-            user.Password = HashingHelper.HashPassword(user.Password);
+                user.Password = HashingHelper.HashPassword(user.Password);
 
-            dbUser = _mapper.Map<User>(user);
+                dbUser = _mapper.Map<User>(user);
 
-            await _unitOfWork.User.InsertAsync(dbUser);
+                await _unitOfWork.User.InsertAsync(dbUser);
 
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
 
-            return _mapper.Map<UserDto>(dbUser);
+                return new SuccessDataResult<UserDto>(_mapper.Map<UserDto>(dbUser));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ErrorDataResult<UserDto>("An error occurred while adding a user.");
+            }
         }
 
-        public async Task<UserDto> GetUserById(Guid id)
+        public async Task<IDataResult<UserDto>> GetUserById(Guid id)
         {
-            User dbUser = await _unitOfWork.User.GetByIdAsync(id);
+            try
+            {
+                User dbUser = await _unitOfWork.User.GetByIdAsync(id);
 
-            return _mapper.Map<UserDto>(dbUser);
+                return new SuccessDataResult<UserDto>(_mapper.Map<UserDto>(dbUser));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ErrorDataResult<UserDto>("An error occurred while pulling a user.");
+            }
         }
 
-        public async Task<UserDto> GetUserByEmail(string email)
+        public async Task<IDataResult<UserDto>> GetUserByEmail(string email)
         {
-            User dbUser = await _unitOfWork.User.GetAsync(predicate => predicate.EmailAddress.Contains(email));
+            try
+            {
+                User dbUser = await _unitOfWork.User.GetAsync(predicate => predicate.EmailAddress.Contains(email));
 
-            if (dbUser is null)
-                throw new Exception("The corresponding record already exists.");
+                if (dbUser is null)
+                    throw new Exception("The corresponding record already exists.");
 
-            if (!dbUser.IsActive)
-                throw new Exception("The user is inactive");
+                if (!dbUser.IsActive)
+                    throw new Exception("The user is inactive");
 
-            return _mapper.Map<UserDto>(dbUser);
+                return new SuccessDataResult<UserDto>(_mapper.Map<UserDto>(dbUser));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ErrorDataResult<UserDto>("An error occurred while pulling a user.");
+            }
         }
 
-        public async Task<List<UserDto>> GetAllUsers()
+        public async Task<IDataResult<List<UserDto>>> GetAllUsers()
         {
-            List<User> dbUsers = await _unitOfWork.User.GetAllAsync();
+            try
+            {
+                List<User> dbUsers = await _unitOfWork.User.GetAllAsync();
 
-            return _mapper.Map<List<UserDto>>(dbUsers);
+                return new SuccessDataResult<List<UserDto>>(_mapper.Map<List<UserDto>>(dbUsers));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ErrorDataResult<List<UserDto>>("An error occurred while pulling a user.");
+            }
         }
 
-        public async Task<UserDto> UpdateUser(UserDto user)
+        public async Task<IDataResult<UserDto>> UpdateUser(UserDto user)
         {
-            User dbUser = await _unitOfWork.User.GetByIdAsync(user.Id);
+            try
+            {
+                User dbUser = await _unitOfWork.User.GetByIdAsync(user.Id);
 
-            if (dbUser is null)
-                throw new Exception("The corresponding record already exists.");
+                if (dbUser is null)
+                    throw new Exception("The corresponding record already exists.");
 
-            _mapper.Map(user, dbUser);
+                _mapper.Map(user, dbUser);
 
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
 
-            return _mapper.Map<UserDto>(dbUser);
+                return new SuccessDataResult<UserDto>(_mapper.Map<UserDto>(dbUser));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ErrorDataResult<UserDto>("An error occurred during the user update process.");
+            }
         }
 
-        public async Task<bool> DeleteUserById(Guid id)
+        public async Task<IDataResult<bool>> DeleteUserById(Guid id)
         {
-            User dbUser = await _unitOfWork.User.GetByIdAsync(id);
+            try
+            {
+                User dbUser = await _unitOfWork.User.GetByIdAsync(id);
 
-            if (dbUser is null)
-                throw new Exception("User not found");
+                if (dbUser is null)
+                    throw new Exception("User not found");
 
-            await _unitOfWork.User.DeleteAsync(dbUser);
+                await _unitOfWork.User.DeleteAsync(dbUser);
 
-            int result = await _unitOfWork.SaveAsync();
+                int result = await _unitOfWork.SaveAsync();
 
-            return result > 0;
+                return new SuccessDataResult<bool>(result > 0);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ErrorDataResult<bool>("An error occurred while deleting the user.");
+            }
         }
     }
 }

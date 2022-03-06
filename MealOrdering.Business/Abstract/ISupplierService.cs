@@ -1,17 +1,17 @@
-﻿using MealOrdering.Entities.Dto;
+﻿using MealOrdering.Core.Utilities.Results.Abstract;
+using MealOrdering.Entities.Dto;
 
-namespace MealOrdering.Business.Abstract
+namespace MealOrdering.Business.Abstract;
+
+public interface ISupplierService
 {
-    public interface ISupplierService
-    {
-        Task<SupplierDto> AddSupplier(SupplierDto supplier);
+    Task<IDataResult<SupplierDto>> AddSupplier(SupplierDto supplier);
 
-        Task<SupplierDto> GetSupplierById(Guid id);
+    Task<IDataResult<SupplierDto>> GetSupplierById(Guid id);
 
-        Task<List<SupplierDto>> GetAllSupplier();
+    Task<IDataResult<List<SupplierDto>>> GetAllSupplier();
 
-        Task<SupplierDto> UpdateSupplier(SupplierDto supplier);
+    Task<IDataResult<SupplierDto>> UpdateSupplier(SupplierDto supplier);
 
-        Task<bool> DeleteSupplierById(Guid id);
-    }
+    Task<IDataResult<bool>> DeleteSupplierById(Guid id);
 }

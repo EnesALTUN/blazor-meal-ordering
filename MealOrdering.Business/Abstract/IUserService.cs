@@ -1,19 +1,19 @@
 ﻿using MealOrdering.Core.Entities.Dto;
+using MealOrdering.Core.Utilities.Results.Abstract;
 
-namespace MealOrdering.Business.Abstract
+namespace MealOrdering.Business.Abstract;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<UserDto> AddUser(UserDto user);
+    Task<IDataResult<UserDto>> AddUser(UserDto user);
 
-        Task<UserDto> GetUserById(Guid id);
+    Task<IDataResult<UserDto>> GetUserById(Guid id);
 
-        Task<UserDto> GetUserByEmail(string email);
+    Task<IDataResult<UserDto>> GetUserByEmail(string email);
 
-        Task<List<UserDto>> GetAllUsers();
+    Task<IDataResult<List<UserDto>>> GetAllUsers();
 
-        Task<UserDto> UpdateUser(UserDto user);
+    Task<IDataResult<UserDto>> UpdateUser(UserDto user);
 
-        Task<bool> DeleteUserById(Guid id);
-    }
+    Task<IDataResult<bool>> DeleteUserById(Guid id);
 }

@@ -1,6 +1,6 @@
 ﻿using MealOrdering.Business.Abstract;
 using MealOrdering.Core.Entities.Dto;
-using MealOrdering.Entities.Response;
+using MealOrdering.Core.Utilities.Results.Concrete;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealOrdering.Server.Controllers
@@ -17,47 +17,67 @@ namespace MealOrdering.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ServiceResponse<UserDto>> CreateUser([FromBody] UserDto user)
+        public async Task<ApiResult<UserDto>> CreateUser([FromBody] UserDto user)
         {
-            return new ServiceResponse<UserDto>
+            var addedUser = await _userService.AddUser(user);
+
+            return new ApiResult<UserDto>
             {
-                Data = await _userService.AddUser(user)
+                Success = addedUser.Success,
+                Message = addedUser.Message,
+                Data = addedUser.Data
             };
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ServiceResponse<UserDto>> GetUserById(Guid id)
+        public async Task<ApiResult<UserDto>> GetUserById(Guid id)
         {
-            return new ServiceResponse<UserDto>
+            var user = await _userService.GetUserById(id);
+
+            return new ApiResult<UserDto>
             {
-                Data = await _userService.GetUserById(id)
+                Success = user.Success,
+                Message = user.Message,
+                Data = user.Data
             };
         }
 
         [HttpGet]
-        public async Task<ServiceResponse<List<UserDto>>> GetUsers()
+        public async Task<ApiResult<List<UserDto>>> GetUsers()
         {
-            return new ServiceResponse<List<UserDto>>
+            var users = await _userService.GetAllUsers();
+
+            return new ApiResult<List<UserDto>>
             {
-                Data = await _userService.GetAllUsers()
+                Success = users.Success,
+                Message = users.Message,
+                Data = users.Data
             };
         }
 
         [HttpPut]
-        public async Task<ServiceResponse<UserDto>> UpdateUser([FromBody] UserDto user)
+        public async Task<ApiResult<UserDto>> UpdateUser([FromBody] UserDto user)
         {
-            return new ServiceResponse<UserDto>
+            var updatedUser = await _userService.UpdateUser(user);
+
+            return new ApiResult<UserDto>
             {
-                Data = await _userService.UpdateUser(user)
+                Success = updatedUser.Success,
+                Message = updatedUser.Message,
+                Data = updatedUser.Data
             };
         }
 
         [HttpDelete]
-        public async Task<ServiceResponse<bool>> DeleteUser([FromBody] Guid id)
+        public async Task<ApiResult<bool>> DeleteUser([FromBody] Guid id)
         {
-            return new ServiceResponse<bool>
+            var isDeleteUser = await _userService.DeleteUserById(id);
+
+            return new ApiResult<bool>
             {
-                Data = await _userService.DeleteUserById(id)
+                Success = isDeleteUser.Success,
+                Message = isDeleteUser.Message,
+                Data = isDeleteUser.Data
             };
         }
     }

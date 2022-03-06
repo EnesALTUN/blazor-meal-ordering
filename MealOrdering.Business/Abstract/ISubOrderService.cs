@@ -1,17 +1,17 @@
-﻿using MealOrdering.Entities.Dto;
+﻿using MealOrdering.Core.Utilities.Results.Abstract;
+using MealOrdering.Entities.Dto;
 
-namespace MealOrdering.Business.Abstract
+namespace MealOrdering.Business.Abstract;
+
+public interface ISubOrderService
 {
-    public interface ISubOrderService
-    {
-        Task<SubOrderDto> AddSubOrder(SubOrderDto subOrder);
+    Task<IDataResult<SubOrderDto>> AddSubOrder(SubOrderDto subOrder);
 
-        Task<SubOrderDto> GetSubOrderById(Guid id);
+    Task<IDataResult<SubOrderDto>> GetSubOrderById(Guid id);
 
-        Task<List<SubOrderDto>> GetAllSubOrder();
+    Task<IDataResult<List<SubOrderDto>>> GetAllSubOrder();
 
-        Task<SubOrderDto> UpdateSubOrder(SubOrderDto subOrder);
+    Task<IDataResult<SubOrderDto>> UpdateSubOrder(SubOrderDto subOrder);
 
-        Task<bool> DeleteSubOrderById(Guid id);
-    }
+    Task<IDataResult<bool>> DeleteSubOrderById(Guid id);
 }

@@ -2,10 +2,10 @@
 @layout MealOrdering.Client.Shared.EmptyLayout
 <PageTitle>Login | MealOrdering</PageTitle>
 
+@using MealOrdering.Core.Utilities.Results.Concrete
 @using MealOrdering.Client.Utilities
 @using MealOrdering.Core.Entities.Dto
 @using MealOrdering.Entities.Request
-@using MealOrdering.Entities.Response
 
 <div id="login-block">
     <div class="login-header">
@@ -54,7 +54,7 @@
 
         if (httpResponse.IsSuccessStatusCode)
         {
-            var res = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<AccessTokenResponseDto>>();
+            var res = await httpResponse.Content.ReadFromJsonAsync<ApiResult<AccessTokenResponseDto>>();
 
             if (res.Success)
             {
