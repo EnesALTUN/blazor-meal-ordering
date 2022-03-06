@@ -18,7 +18,7 @@ namespace MealOrdering.Server.Data.EntityFramework.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=<password>", mig => mig.MigrationsAssembly("MealOrdering.Server.Data"));
+            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=qwer1234", mig => mig.MigrationsAssembly("MealOrdering.Server.Data"));
         }
 
         public virtual DbSet<User> User { get; set; }

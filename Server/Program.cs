@@ -11,6 +11,7 @@ using MealOrdering.Core.Entities.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ builder.Services.AddControllersWithViews()
             });
 builder.Services.AddRazorPages();
 builder.Services.AddBlazoredModal();
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSwaggerGen(c =>
 {

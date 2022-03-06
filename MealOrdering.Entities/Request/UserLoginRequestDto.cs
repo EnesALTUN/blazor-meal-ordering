@@ -1,8 +1,8 @@
 ﻿using MealOrdering.Core.Entities.Base;
 
-namespace MealOrdering.Entities.Dto;
+namespace MealOrdering.Entities.Request;
 
-public class UserLoginDto : IDto
+public class UserLoginRequestDto : IDto
 {
     public string Email { get; set; }
 

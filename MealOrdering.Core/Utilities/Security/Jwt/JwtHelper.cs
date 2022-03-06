@@ -38,7 +38,9 @@ public class JwtHelper : IJwtHelper
     {
         return new List<Claim>()
         {
-            new Claim(ClaimTypes.Email, user.EmailAddress)
+            new Claim(ClaimTypes.Email, user.EmailAddress),
+            new Claim(ClaimTypes.Name, user.FirstName),
+            new Claim(ClaimTypes.Surname, user.LastName)
         };
     }
 }

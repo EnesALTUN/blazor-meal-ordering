@@ -1,7 +1,15 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+*{
+  outline: 0;
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Fredoka', sans-serif;
 }
 
 h1:focus {

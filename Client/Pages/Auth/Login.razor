@@ -1,0 +1,83 @@
+﻿@page "/login"
+@layout MealOrdering.Client.Shared.EmptyLayout
+<PageTitle>Login | MealOrdering</PageTitle>
+
+@using MealOrdering.Client.Utilities
+@using MealOrdering.Core.Entities.Dto
+@using MealOrdering.Entities.Request
+@using MealOrdering.Entities.Response
+
+<div id="login-block">
+    <div class="login-header">
+        <span class="oi oi-person"></span>
+        <span>Login</span>
+    </div>
+    <div class="login-content">
+        <EditForm Model="@userLoginRequest" OnValidSubmit="LoginProcess">
+            <DataAnnotationsValidator />
+    
+            <div class="form-group">
+                <InputText @bind-Value="userLoginRequest.Email" id="email" class="form-control" placeholder="mealordering@gmail.com" />
+                <label for="email">Email Address *</label>
+            </div>
+    
+            <div class="form-group">
+                <InputText @bind-Value="userLoginRequest.Password" id="password" type="@PasswordInputType" class="form-control" placeholder="*****" />
+                <label for="password">Password *</label>
+                <span class="oi @PasswordIcon" @onclick="TogglePassword"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Login</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private UserLoginRequestDto userLoginRequest = new();
+    private string PasswordInputType = "password";
+    private string PasswordIcon = "oi-lock-locked";
+
+    [Inject]
+    HttpClient httpClient { get; set; }
+
+    [Inject]
+    ModalManager ModalManager { get; set; }
+
+    [Inject]
+    NavigationManager NavigationManager { get; set; }
+
+    private async Task LoginProcess()
+    {
+        var httpResponse = await httpClient.PostAsJsonAsync("api/auth/login", userLoginRequest);
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var res = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<AccessTokenResponseDto>>();
+
+            if (res.Success)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                await ModalManager.ShowMessageAsync("Login Error", res.Message);
+            }
+        }
+    }
+
+    private void TogglePassword()
+    {
+        if(PasswordInputType.Equals("password")) 
+        { 
+            PasswordInputType = "text";
+            PasswordIcon = "oi-lock-unlocked";
+        } 
+        else 
+        { 
+            PasswordInputType = "password";
+            PasswordIcon = "oi-lock-locked";
+        } 
+    }
+}

@@ -2,22 +2,25 @@
 using MealOrdering.Core.Entities.Dto;
 using MealOrdering.Core.Utilities;
 using MealOrdering.Core.Utilities.Security.Jwt;
-using MealOrdering.Entities.Dto;
+using MealOrdering.Entities.Request;
+using Microsoft.Extensions.Logging;
 
 namespace MealOrdering.Business.Concrete;
 
 public class AuthManager : IAuthService
 {
+    private readonly ILogger<AuthManager> _logger;
     private readonly IUserService _userService;
     private readonly IJwtHelper _jwtHelper;
 
-    public AuthManager(IUserService userService, IJwtHelper jwtHelper)
+    public AuthManager(ILogger<AuthManager> logger, IUserService userService, IJwtHelper jwtHelper)
     {
+        _logger = logger;
         _userService = userService;
         _jwtHelper = jwtHelper;
     }
 
-    public async Task<AccessTokenResponseDto> Login(UserLoginDto user)
+    public async Task<AccessTokenResponseDto> Login(UserLoginRequestDto user)
     {
         try
         {
@@ -30,8 +33,8 @@ public class AuthManager : IAuthService
         }
         catch (Exception ex)
         {
-
-            throw;
+            _logger.LogError(ex, ex.Message);
+            return new AccessTokenResponseDto { };
         }
     }
 }

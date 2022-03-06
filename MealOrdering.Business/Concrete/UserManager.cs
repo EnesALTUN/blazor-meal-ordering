@@ -50,6 +50,9 @@ namespace MealOrdering.Business.Concrete
             if (dbUser is null)
                 throw new Exception("The corresponding record already exists.");
 
+            if (!dbUser.IsActive)
+                throw new Exception("The user is inactive");
+
             return _mapper.Map<UserDto>(dbUser);
         }
 
