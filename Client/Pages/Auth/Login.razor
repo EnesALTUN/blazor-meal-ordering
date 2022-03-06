@@ -17,7 +17,7 @@
             <DataAnnotationsValidator />
     
             <div class="form-group">
-                <InputText @bind-Value="userLoginRequest.Email" id="email" class="form-control" placeholder="mealordering@gmail.com" />
+                <InputText @bind-Value="userLoginRequest.Email" id="email" class="form-control" placeholder="mealordering@gmail.com" autofocus />
                 <label for="email">Email Address *</label>
             </div>
     
@@ -48,6 +48,9 @@
     [Inject]
     NavigationManager NavigationManager { get; set; }
 
+    [Inject]
+    IToastService ToastService { get; set; }
+
     private async Task LoginProcess()
     {
         var httpResponse = await httpClient.PostAsJsonAsync("api/auth/login", userLoginRequest);
@@ -58,11 +61,12 @@
 
             if (res.Success)
             {
+                ToastService.ShowSuccess("User login is successful");
                 NavigationManager.NavigateTo("/");
             }
             else
             {
-                await ModalManager.ShowMessageAsync("Login Error", res.Message);
+                ToastService.ShowError("User login is unsuccessful");
             }
         }
     }
