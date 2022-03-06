@@ -3,6 +3,7 @@ using Blazored.Modal;
 using Blazored.Toast;
 using MealOrdering.Client;
 using MealOrdering.Client.Utilities;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -16,5 +17,8 @@ builder.Services.AddBlazoredModal();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredToast();
 builder.Services.AddScoped<ModalManager>();
+
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, LocalAuthStateProvider>();
 
 await builder.Build().RunAsync();

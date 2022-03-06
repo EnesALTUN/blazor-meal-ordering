@@ -27,6 +27,9 @@ namespace MealOrdering.Business.ModelMapping.AutoMapper
 
             CreateMap<User, UserDto>()
                 .ReverseMap();
+
+            CreateMap<UserDto, AccessTokenResponseDto>()
+                .ReverseMap();
         }
     }
 }

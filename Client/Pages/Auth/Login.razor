@@ -6,6 +6,7 @@
 @using MealOrdering.Client.Utilities
 @using MealOrdering.Core.Entities.Dto
 @using MealOrdering.Entities.Request
+@using System.Net.Http.Headers
 
 <div id="login-block">
     <div class="login-header">
@@ -22,9 +23,9 @@
             </div>
     
             <div class="form-group">
-                <InputText @bind-Value="userLoginRequest.Password" id="password" type="@PasswordInputType" class="form-control" placeholder="*****" />
+                <InputText @bind-Value="userLoginRequest.Password" id="password" type="@passwordInputType" class="form-control" placeholder="*****" />
                 <label for="password">Password *</label>
-                <span class="oi @PasswordIcon" @onclick="TogglePassword"></span>
+                <span class="oi @passwordIcon" @onclick="TogglePassword"></span>
             </div>
 
             <div class="form-group">
@@ -36,20 +37,23 @@
 
 @code {
     private UserLoginRequestDto userLoginRequest = new();
-    private string PasswordInputType = "password";
-    private string PasswordIcon = "oi-lock-locked";
+    private string passwordInputType = "password";
+    private string passwordIcon = "oi-lock-locked";
 
     [Inject]
     HttpClient httpClient { get; set; }
 
     [Inject]
-    ModalManager ModalManager { get; set; }
+    IToastService toastService { get; set; }
 
     [Inject]
-    NavigationManager NavigationManager { get; set; }
+    ILocalStorageService localStorageService { get; set; }
 
     [Inject]
-    IToastService ToastService { get; set; }
+    NavigationManager navigationManager { get; set; }
+
+    [Inject]
+    AuthenticationStateProvider _authenticationStateProvider { get; set; }
 
     private async Task LoginProcess()
     {
@@ -61,27 +65,35 @@
 
             if (res.Success)
             {
-                ToastService.ShowSuccess("User login is successful");
-                NavigationManager.NavigateTo("/");
+                await localStorageService.SetItemAsStringAsync("token", res.Data.Token);
+                await localStorageService.SetItemAsStringAsync("email", userLoginRequest.Email);
+                await localStorageService.SetItemAsStringAsync("firstName", res.Data.FirstName);
+                await localStorageService.SetItemAsStringAsync("lastName", res.Data.LastName);
+
+                (_authenticationStateProvider as LocalAuthStateProvider).NotifyUserLogin(userLoginRequest.Email);
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", res.Data.Token);
+
+                navigationManager.NavigateTo("/");
             }
             else
             {
-                ToastService.ShowError("User login is unsuccessful");
+                toastService.ShowError("User login is unsuccessful");
             }
         }
     }
 
     private void TogglePassword()
     {
-        if(PasswordInputType.Equals("password")) 
+        if(passwordInputType.Equals("password")) 
         { 
-            PasswordInputType = "text";
-            PasswordIcon = "oi-lock-unlocked";
+            passwordInputType = "text";
+            passwordIcon = "oi-lock-unlocked";
         } 
         else 
         { 
-            PasswordInputType = "password";
-            PasswordIcon = "oi-lock-locked";
+            passwordInputType = "password";
+            passwordIcon = "oi-lock-locked";
         } 
     }
 }

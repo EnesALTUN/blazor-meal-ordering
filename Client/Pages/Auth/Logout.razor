@@ -1,0 +1,27 @@
+﻿@page "/logout"
+@using MealOrdering.Client.Utilities
+
+@code {
+    [Inject]
+    ILocalStorageService localStorageService { get; set; }
+
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    [Inject]
+    HttpClient httpClient { get; set; }
+
+    [Inject]
+    NavigationManager navigationManager { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await localStorageService.RemoveItemsAsync(new[] { "token", "email", "firstName", "lastName" });
+
+        (authenticationStateProvider as LocalAuthStateProvider).NotifyUserLogout();
+
+        httpClient.DefaultRequestHeaders.Authorization = null;
+
+        navigationManager.NavigateTo("/login");
+    }
+}

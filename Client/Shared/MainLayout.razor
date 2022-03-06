@@ -7,7 +7,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">@loginUser</a>
         </div>
 
         <article class="content px-4">
@@ -15,3 +15,33 @@
         </article>
     </main>
 </div>
+
+@code{
+    [CascadingParameter]
+    public Task<AuthenticationState> _authState { get; set; }
+
+    [Inject]
+    ILocalStorageService localStorageService { get; set; }
+
+    [Inject]
+    NavigationManager navigationManager { get; set; }
+
+    private string loginUser = "Anonymous";
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authSate = await _authState;
+
+        if (authSate.User.Identity.IsAuthenticated)
+        {
+            string loginUserFirstName = await localStorageService.GetItemAsStringAsync("firstName");
+            string loginUserLastName = await localStorageService.GetItemAsStringAsync("lastName");
+
+            loginUser = $"{loginUserFirstName} {loginUserLastName}";
+        }
+        else
+        {
+            navigationManager.NavigateTo("/login");
+        }
+    }
+}

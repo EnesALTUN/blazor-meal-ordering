@@ -1,4 +1,5 @@
-﻿using MealOrdering.Business.Abstract;
+﻿using AutoMapper;
+using MealOrdering.Business.Abstract;
 using MealOrdering.Core.Entities.Dto;
 using MealOrdering.Core.Utilities;
 using MealOrdering.Core.Utilities.Results.Abstract;
@@ -14,12 +15,18 @@ public class AuthManager : IAuthService
     private readonly ILogger<AuthManager> _logger;
     private readonly IUserService _userService;
     private readonly IJwtHelper _jwtHelper;
+    private readonly IMapper _mapper;
 
-    public AuthManager(ILogger<AuthManager> logger, IUserService userService, IJwtHelper jwtHelper)
+    public AuthManager(
+        ILogger<AuthManager> logger,
+        IUserService userService,
+        IJwtHelper jwtHelper,
+        IMapper mapper)
     {
         _logger = logger;
         _userService = userService;
         _jwtHelper = jwtHelper;
+        _mapper = mapper;
     }
 
     public async Task<IDataResult<AccessTokenResponseDto>> Login(UserLoginRequestDto user)
@@ -34,6 +41,7 @@ public class AuthManager : IAuthService
                     throw new Exception("Incorrect password");
 
                 IDataResult<AccessTokenResponseDto> createdToken = _jwtHelper.CreateToken(userDto.Data);
+                _mapper.Map(userDto.Data, createdToken.Data);
 
                 if (!createdToken.Success)
                     throw new Exception(createdToken.Message);
