@@ -1,6 +1,6 @@
 ﻿using MealOrdering.Entities.Concrete;
-using MealOrdering.Server.Data.EntityFramework.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace MealOrdering.Server.Data.EntityFramework.Context
 {
@@ -18,7 +18,11 @@ namespace MealOrdering.Server.Data.EntityFramework.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=qwer1234", mig => mig.MigrationsAssembly("MealOrdering.Server.Data"));
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+            optionsBuilder.UseNpgsql(configuration.GetConnectionString("PostgreSqlConn"), mig => mig.MigrationsAssembly("MealOrdering.Server.Data"));
         }
 
         public virtual DbSet<User> User { get; set; }
@@ -28,11 +32,6 @@ namespace MealOrdering.Server.Data.EntityFramework.Context
         public virtual DbSet<SubOrder> SubOrder { get; set; }
 
         public virtual DbSet<Supplier> Supplier { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(DbModelBuilder.DbBuilder(modelBuilder));
-        }
     }
 
 }
