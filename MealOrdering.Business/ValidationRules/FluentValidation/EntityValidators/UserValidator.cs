@@ -7,17 +7,36 @@ namespace MealOrdering.Business.ValidationRules.FluentValidation.EntityValidator
     {
         public UserValidator()
         {
-            RuleFor(user => user.Id).NotEmpty();
-            RuleFor(user => user.FirstName).NotEmpty();
-            RuleFor(user => user.FirstName).Length(3, 100);
-            RuleFor(user => user.LastName).NotEmpty();
-            RuleFor(user => user.LastName).Length(3, 100);
-            RuleFor(user => user.EmailAddress).NotEmpty();
-            RuleFor(user => user.EmailAddress).EmailAddress();
-            RuleFor(user => user.IsActive).NotEmpty();
-            RuleFor(user => user.IsDeleted).NotEmpty();
-            RuleFor(user => user.CreatedDate).NotEmpty();
-            RuleFor(user => user.ModifiedDate).NotEmpty();
+            RuleFor(user => user.Id)
+                .NotNull()
+                .WithName("id");
+
+            RuleFor(user => user.FirstName)
+                .NotNull()
+                .Length(3, 100);
+
+            RuleFor(user => user.LastName)
+                .NotNull()
+                .Length(3, 100);
+
+            RuleFor(user => user.EmailAddress)
+                .NotNull()
+                .EmailAddress();
+
+            RuleFor(user => user.Password)
+                .NotNull();
+
+            RuleFor(user => user.IsActive)
+                .NotNull();
+
+            RuleFor(user => user.IsDeleted)
+                .NotNull();
+
+            RuleFor(user => user.CreatedDate)
+                .NotNull();
+
+            RuleFor(user => user.ModifiedDate)
+                .NotNull();
         }
     }
 }
