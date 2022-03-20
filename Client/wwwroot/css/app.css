@@ -71,6 +71,32 @@ a, .btn-link {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
+
+table .btn-icon {
+  margin-right: 0px;
+}
+table tr {
+  vertical-align: middle !important;
+}
+
+form .row {
+  margin-bottom: 10px;
+}
+
+.blazored-toast-header h5 {
+  font-size: 1.1rem !important;
+}
+.blazored-toast-container {
+  z-index: 9999 !important;
+}
+.blazored-toast-icon {
+  font-size: 2rem !important;
+}
+@media (min-width: 576px) {
+  .blazored-toast {
+    width: 23rem !important;
+  }
+}

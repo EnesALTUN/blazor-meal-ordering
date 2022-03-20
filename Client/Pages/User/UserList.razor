@@ -1,6 +1,10 @@
-﻿@page "/userlist"
+﻿@page "/users"
 
 @inherits UserListProcess
+
+<div class="btn-group">
+    <AddNewButtonComponent Caption="Create User" OnClick="GoCreateUserPage" />
+</div>
 
 @if(Users is not null)
 {
@@ -12,17 +16,22 @@
                 <th scope="col">Email Adres</th>
                 <th scope="col">Oluşturulma Tarihi</th>
                 <th scope="col">Durum</th>
+                <th scope="col">#</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var user in Users)
             {
+                string spanClass = "badge rounded-pill bg-" + (user.IsActive ? "success" : "danger");
                 <tr>
                     <td>@user.Id</td>
                     <td>@user.FullName</td>
                     <td>@user.EmailAddress</td>
                     <td>@user.CreatedDate</td>
-                    <td>@user.IsActive</td>
+                    <td><span class="@spanClass"> @(user.IsActive ? "Active" : "Passive")</span></td>
+                    <td>
+                        <CustomEditButtonComponent IsSmall="true" Caption="" OnClick="@(() => GoUpdateUserPage(user.Id))" />
+                    </td>
                 </tr>
             }
         </tbody>

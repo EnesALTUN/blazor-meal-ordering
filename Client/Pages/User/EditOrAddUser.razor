@@ -1,0 +1,126 @@
+﻿@page "/user/add"
+@page "/user/edit/{UserId:guid}"
+
+<h3>@pageTitle</h3>
+
+<EditForm Model="@UserModel" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="row">
+        <div class="form-group col-12 col-md-6">
+            <label>First Name</label>
+            <InputText @bind-Value="@UserModel.FirstName" class="form-control" />
+            <ValidationMessage For="@(() => UserModel.FirstName)"/>
+        </div>
+        <div class="form-group col-12 col-md-6">
+            <label>Last Name</label>
+            <InputText @bind-Value="@UserModel.LastName" class="form-control" />
+            <ValidationMessage For="@(() => UserModel.LastName)"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-12 col-md-6">
+            <label>Email Address</label>
+            <InputText @bind-Value="@UserModel.EmailAddress" class="form-control" />
+            <ValidationMessage For="@(() => UserModel.EmailAddress)"/>
+        </div>
+        <div class="form-group col-12 col-md-6">
+            <label>Password</label>
+            <InputText @bind-Value="@UserModel.Password" class="form-control" type="password" />
+            <ValidationMessage For="@(() => UserModel.Password)"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-12">
+            <InputCheckbox @bind-Value="@UserModel.IsActive" class="form-check-input" id="chkUserStatus" />
+            <label for="chkUserStatus" class="form-check-label">User Status</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <SaveButtonComponent Caption="Save" />
+        <CancelButtonComponent OnClick="GoBackUserList" />
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Guid? UserId { get; set; }
+
+    private UserDto UserModel = new();
+
+    private string pageTitle = "Create User";
+
+    [Inject]
+    public HttpClient client { get; set; }
+
+    [Inject]
+    public NavigationManager navigationManager { get; set; }
+
+    [Inject]
+    IToastService toastService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserId is not null && UserId != Guid.Empty)
+        {
+            pageTitle = "Edit User";
+
+            try
+            {
+                var httpRes = await client.GetServiceResponseAsync<UserDto>($"/api/user/{UserId}", true);
+
+                if (httpRes.Success && httpRes.Data is not null)
+                {
+                    httpRes.Data.Password = string.Empty;
+
+                    UserModel = httpRes.Data;
+                }
+                else
+                {
+                    toastService.ShowError(httpRes.Message, "User Not Found!");
+                    GoBackUserList();
+                }
+            }
+            catch (Exception)
+            {
+                toastService.ShowError("The operation could not be performed.", "Error");
+            }
+        }
+    }
+
+    async Task OnValidSubmit()
+    {
+        try
+        {
+            string url = "api/user";
+
+            var httpRes = (UserId is null || UserId.Equals(Guid.Empty))
+                ? await client.PostGetServiceResponseAsync<UserDto, UserDto>(url, UserModel)
+                : await client.PutGetServiceResponseAsync<UserDto, UserDto>(url, UserModel);
+
+            if (httpRes.Success)
+            {
+                httpRes.Data.Password = string.Empty;
+
+                UserModel = httpRes.Data;
+                toastService.ShowSuccess($"The operation on the {UserModel.FullName} record is successful.", "Success");
+
+                GoBackUserList();
+            }
+            else
+                toastService.ShowError($"The operation on the {UserModel.FullName} record is unsuccessful.", "Error");
+        }
+        catch (Exception)
+        {
+            toastService.ShowError("The operation could not be performed.", "Error");
+        }
+    }
+
+    void GoBackUserList()
+    {
+        navigationManager.NavigateTo("/users");
+    }
+}

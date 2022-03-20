@@ -2,10 +2,13 @@
 @using Blazored.Toast.Configuration
 
 <BlazoredToasts Position="ToastPosition.TopRight"
-                Timeout="300"
+                Timeout="5"
                 ShowProgressBar="true"
                 IconType="IconType.FontAwesome"
-                SuccessClass="success-toast-override" />
+                SuccessClass="success-toast-override"
+                SuccessIcon="fas fa-check"
+                ErrorIcon="fas fa-exclamation-triangle"
+                MaxToastCount="3" />
 
 <HeadContent>
     <link rel="stylesheet"

@@ -70,8 +70,8 @@ namespace MealOrdering.Server.Controllers
             };
         }
 
-        [HttpDelete]
-        public async Task<ApiResult<bool>> DeleteUser([FromBody] Guid id)
+        [HttpDelete("{id:guid}")]
+        public async Task<ApiResult<bool>> DeleteUser(Guid id)
         {
             var isDeleteUser = await _userService.DeleteUserById(id);
 

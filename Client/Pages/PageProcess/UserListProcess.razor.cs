@@ -9,6 +9,9 @@ namespace MealOrdering.Client.Pages.User
         [Inject]
         public HttpClient Client { get; set; }
 
+        [Inject]
+        public NavigationManager navigationManager { get; set; }
+
         protected List<UserDto> Users = new();
 
         protected override async Task OnInitializedAsync()
@@ -22,6 +25,16 @@ namespace MealOrdering.Client.Pages.User
 
             if (apiResult.Success)
                 Users = apiResult.Data;
+        }
+
+        protected void GoCreateUserPage()
+        {
+            navigationManager.NavigateTo("/user/add");
+        }
+
+        protected void GoUpdateUserPage(Guid id)
+        {
+            navigationManager.NavigateTo($"/user/edit/{id}");
         }
     }
 }

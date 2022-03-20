@@ -1,4 +1,21 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
+
+<BlazoredToasts Position="ToastPosition.TopRight"
+                Timeout="5000"
+                ShowProgressBar="true"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fas fa-check"
+                ErrorIcon="fas fa-exclamation-triangle"
+                MaxToastCount="3" />
+
+<HeadContent>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Fredoka" />
+     <link rel="stylesheet"
+           href="_content/Blazored.Toast/blazored-toast.min.css" />
+</HeadContent>
 
 <div class="page">
     <div class="sidebar">
