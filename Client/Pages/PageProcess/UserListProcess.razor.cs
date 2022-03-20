@@ -1,7 +1,6 @@
-﻿using MealOrdering.Core.Entities.Dto;
-using MealOrdering.Core.Utilities.Results.Concrete;
+﻿using MealOrdering.Client.Utilities;
+using MealOrdering.Core.Entities.Dto;
 using Microsoft.AspNetCore.Components;
-using System.Net.Http.Json;
 
 namespace MealOrdering.Client.Pages.User
 {
@@ -19,10 +18,10 @@ namespace MealOrdering.Client.Pages.User
 
         protected async Task LoadList()
         {
-            var serviceResponse = await Client.GetFromJsonAsync<ApiResult<List<UserDto>>>("api/user");
+            var apiResult = await Client.GetServiceResponseAsync<List<UserDto>>("api/user");
 
-            if (serviceResponse.Success)
-                Users = serviceResponse.Data;
+            if (apiResult.Success)
+                Users = apiResult.Data;
         }
     }
 }
