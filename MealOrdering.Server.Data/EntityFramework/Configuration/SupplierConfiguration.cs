@@ -44,13 +44,13 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
 
         builder.Property(x => x.CreatedDate)
             .HasColumnName("created_date")
-            .HasColumnType("date")
+            .HasColumnType("timestamptz")
             .HasDefaultValueSql("now()")
             .IsRequired();
 
         builder.Property(x => x.ModifiedDate)
             .HasColumnName("modified_date")
-            .HasColumnType("date")
+            .HasColumnType("timestamptz")
             .HasDefaultValueSql("now()")
             .IsRequired();
     }

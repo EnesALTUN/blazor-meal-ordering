@@ -110,6 +110,7 @@ namespace MealOrdering.Business.Concrete
                     throw new Exception("The corresponding record already exists.");
 
                 user.Password = HashingHelper.HashPassword(user.Password);
+                user.ModifiedDate = DateTime.UtcNow;
 
                 _mapper.Map(user, dbUser);
 

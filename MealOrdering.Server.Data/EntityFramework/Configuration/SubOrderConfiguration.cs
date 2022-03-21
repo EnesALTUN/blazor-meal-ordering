@@ -37,7 +37,7 @@ public class SubOrderConfiguration : IEntityTypeConfiguration<SubOrder>
 
         builder.Property(x => x.CreatedDate)
             .HasColumnName("created_date")
-            .HasColumnType("date")
+            .HasColumnType("timestamptz")
             .HasDefaultValueSql("now()")
             .IsRequired();
 
@@ -53,7 +53,7 @@ public class SubOrderConfiguration : IEntityTypeConfiguration<SubOrder>
 
         builder.Property(x => x.ModifiedDate)
             .HasColumnName("modified_date")
-            .HasColumnType("date")
+            .HasColumnType("timestamptz")
             .HasDefaultValueSql("now()")
             .IsRequired();
 
