@@ -109,6 +109,8 @@ namespace MealOrdering.Business.Concrete
                 if (dbUser is null)
                     throw new Exception("The corresponding record already exists.");
 
+                user.Password = HashingHelper.HashPassword(user.Password);
+
                 _mapper.Map(user, dbUser);
 
                 await _unitOfWork.SaveAsync();
