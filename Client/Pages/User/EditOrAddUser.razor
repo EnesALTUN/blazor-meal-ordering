@@ -70,7 +70,7 @@
 
             try
             {
-                var httpRes = await client.GetServiceResponseAsync<UserDto>($"/api/user/{UserId}", true);
+                var httpRes = await client.GetServiceResponseAsync<UserDto>($"/api/v1/user/{UserId}", true);
 
                 if (httpRes.Success && httpRes.Data is not null)
                 {
@@ -95,7 +95,7 @@
     {
         try
         {
-            string url = "api/user";
+            string url = "api/v1/user";
 
             var httpRes = (UserId is null || UserId.Equals(Guid.Empty))
                 ? await client.PostGetServiceResponseAsync<UserDto, UserDto>(url, UserModel)

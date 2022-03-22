@@ -29,7 +29,7 @@ namespace MealOrdering.Client.Pages.User
 
         protected async Task LoadList()
         {
-            var apiResult = await Client.GetServiceResponseAsync<List<UserDto>>("api/user");
+            var apiResult = await Client.GetServiceResponseAsync<List<UserDto>>("api/v1/user");
 
             if (apiResult.Success)
                 Users = apiResult.Data;
@@ -53,7 +53,7 @@ namespace MealOrdering.Client.Pages.User
 
             try
             {
-                ApiResult<bool> isDeleted = await Client.DeleteGetServiceResponseAsync<bool>($"api/user/{id}");
+                ApiResult<bool> isDeleted = await Client.DeleteGetServiceResponseAsync<bool>($"api/v1/user/{id}");
 
                 if (isDeleted.Success && isDeleted.Data)
                 {

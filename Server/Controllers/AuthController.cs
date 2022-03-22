@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MealOrdering.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -17,7 +18,7 @@ namespace MealOrdering.Server.Controllers
             _authService = authService;
         }
 
-        [HttpPost("Login")]
+        [HttpPost]
         public async Task<ApiResult<AccessTokenResponseDto>> Login([FromBody] UserLoginRequestDto user)
         {
             var loginResult = await _authService.Login(user);

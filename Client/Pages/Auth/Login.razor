@@ -56,7 +56,7 @@
 
     private async Task LoginProcess()
     {
-        var httpResponse = await httpClient.PostAsJsonAsync("api/auth/login", userLoginRequest);
+        var httpResponse = await httpClient.PostAsJsonAsync("api/v1/login", userLoginRequest);
 
         if (httpResponse.IsSuccessStatusCode)
         {
