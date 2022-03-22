@@ -1,5 +1,7 @@
-﻿using MealOrdering.Client.Utilities;
+﻿using Blazored.Toast.Services;
+using MealOrdering.Client.Utilities;
 using MealOrdering.Core.Entities.Dto;
+using MealOrdering.Core.Utilities.Results.Concrete;
 using Microsoft.AspNetCore.Components;
 
 namespace MealOrdering.Client.Pages.User
@@ -11,6 +13,12 @@ namespace MealOrdering.Client.Pages.User
 
         [Inject]
         public NavigationManager navigationManager { get; set; }
+
+        [Inject]
+        public ModalManager modalManager { get; set; }
+
+        [Inject]
+        public IToastService toastService { get; set; }
 
         protected List<UserDto> Users = new();
 
@@ -35,6 +43,30 @@ namespace MealOrdering.Client.Pages.User
         protected void GoUpdateUserPage(Guid id)
         {
             navigationManager.NavigateTo($"/user/edit/{id}");
+        }
+
+        protected async Task DeleteUser(Guid id)
+        {
+            bool isConfirmed = await modalManager.ConfirmationAsync("Delete User Confirmation", "User will be deleted. Are you sure?");
+
+            if (!isConfirmed) return;
+
+            try
+            {
+                ApiResult<bool> isDeleted = await Client.DeleteGetServiceResponseAsync<bool>($"api/user/{id}");
+
+                if (isDeleted.Success && isDeleted.Data)
+                {
+                    toastService.ShowSuccess("User deletion successful", "Success");
+                    await LoadList();
+                }
+                else
+                    toastService.ShowError("User deletion failed.", "Error");
+            }
+            catch (Exception)
+            {
+                toastService.ShowError("User deletion failed.", "Error");
+            }
         }
     }
 }

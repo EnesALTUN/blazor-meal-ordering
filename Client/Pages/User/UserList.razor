@@ -31,6 +31,7 @@
                     <td><span class="@spanClass"> @(user.IsActive ? "Active" : "Passive")</span></td>
                     <td>
                         <CustomEditButtonComponent IsSmall="true" Caption="" OnClick="@(() => GoUpdateUserPage(user.Id))" />
+                        <DeleteButtonComponent IsSmall="true" Caption="" OnClick="@(() => DeleteUser(user.Id))" />
                     </td>
                 </tr>
             }
